@@ -16,6 +16,7 @@ from voc_arc.plotting import (
     plot_class_distribution,
     plot_dialogue_trajectory,
     plot_transition_heatmap,
+    plot_weight_forest,
     set_style,
 )
 
@@ -48,6 +49,17 @@ def test_transition_heatmap_smoke() -> None:
     ax = plot_transition_heatmap(matrix, title="transitions")
     assert ax.get_title() == "transitions"
     assert len(ax.texts) == 49
+
+
+def test_weight_forest_smoke() -> None:
+    weights = pd.DataFrame(
+        {"coef": [0.4, -0.2, 0.0], "lo": [0.1, -0.5, -0.2], "hi": [0.7, 0.1, 0.2]},
+        index=["ask_timing", "age", "is_male"],
+    )
+    ax = plot_weight_forest(weights, title="weights", highlight=["ask_timing"])
+    assert ax.get_title() == "weights"
+    assert len(ax.lines) == 2 * 3 + 1  # whisker and marker per row plus the zero line
+    assert [label.get_text() for label in ax.get_yticklabels()] == ["is_male", "age", "ask_timing"]
 
 
 def test_class_distribution_smoke() -> None:
