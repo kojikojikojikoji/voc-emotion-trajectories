@@ -1,9 +1,11 @@
 # Lint, unit tests, and headless execution of the notebooks.
 # The CI=true environment variable (set by GitHub Actions) makes the
-# notebooks use reduced bootstrap sizes. The raw DailyDialog archive is
-# never downloaded here; all three notebooks fall back to the committed
-# 1,000-dialogue sample under data/sample/, which exercises every code
-# path including the numeric-validation asserts.
+# notebooks use reduced bootstrap and replicate sizes. No raw data is
+# downloaded here; all four notebooks fall back to the committed samples
+# under data/sample/ (DailyDialog 1,000 dialogues; the complete Persuasion
+# for Good annotated subset), which exercises every code path including
+# the numeric-validation asserts. Notebook 04 skips only its optional
+# full-corpus projection section on this path.
 name: ci
 
 on:
