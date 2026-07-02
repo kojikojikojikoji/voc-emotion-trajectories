@@ -130,6 +130,38 @@ def plot_transition_heatmap(
     return ax
 
 
+def plot_weight_forest(
+    weights: pd.DataFrame,
+    title: str,
+    highlight: list[str] | None = None,
+    ax: plt.Axes | None = None,
+) -> plt.Axes:
+    """Standardized coefficients with CI whiskers, one row per predictor.
+
+    Args:
+        weights: frame indexed by predictor name with columns ``coef``,
+            ``lo`` and ``hi`` (from the ``weights`` module).
+        title: axes title; state the conclusion, not the plot type.
+        highlight: predictor names drawn in the accent color (e.g. the
+            conversation attributes, as opposed to controls).
+        ax: existing axes, or ``None`` to create a new figure.
+    """
+    if ax is None:
+        _, ax = plt.subplots(figsize=(7, 0.42 * len(weights) + 1.2))
+    highlight = highlight or []
+    order = weights.iloc[::-1]
+    positions = np.arange(len(order))
+    for y, (name, row) in zip(positions, order.iterrows(), strict=True):
+        color = PALETTE[0] if name in highlight else PALETTE[5]
+        ax.plot([row["lo"], row["hi"]], [y, y], "-", color=color, lw=1.8)
+        ax.plot(row["coef"], y, "o", color=color, ms=6)
+    ax.axvline(0, color="#555555", lw=0.8)
+    ax.set_yticks(positions, order.index)
+    ax.set_xlabel("standardized coefficient (95% bootstrap CI)")
+    ax.set_title(title)
+    return ax
+
+
 def plot_class_distribution(
     counts: pd.Series,
     title: str,
