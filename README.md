@@ -1,4 +1,4 @@
-# voc-emotion-trajectories
+# VoC Emotion Trajectories
 
 Documentation in Japanese: [README.ja.md](./README.ja.md)
 
