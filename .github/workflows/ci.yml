@@ -1,0 +1,37 @@
+# Lint, unit tests, and headless execution of the notebooks.
+# The CI=true environment variable (set by GitHub Actions) makes the
+# notebooks use reduced bootstrap sizes. The raw DailyDialog archive is
+# never downloaded here; all three notebooks fall back to the committed
+# 1,000-dialogue sample under data/sample/, which exercises every code
+# path including the numeric-validation asserts.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Unit and numerical tests
+        run: pytest -q
+
+      - name: Execute notebooks
+        run: |
+          for nb in notebooks/*.ipynb; do
+            jupyter nbconvert --to notebook --execute --inplace "$nb"
+          done

@@ -1,0 +1,13 @@
+# Runtime dependencies, pinned for reproducibility (Python 3.11).
+numpy==2.4.6
+pandas==3.0.3
+scipy==1.17.1
+scikit-learn==1.9.0
+matplotlib==3.11.0
+jupyter==1.1.1
+jupytext==1.19.4
+nbconvert==7.17.1
+python-dotenv==1.2.2
+
+# The voc_arc package itself (src/ layout).
+-e .
